@@ -15,8 +15,6 @@ $data = array(
 	'new_password'     => $request->variable('new_password', '', true),
 	'password_confirm' => $request->variable('password_confirm', '', true),
 	'email'            => strtolower($request->variable('email', '')),
-	'lang'             => basename($request->variable('lang', $user->lang_name)),
-	'tz'               => $request->variable('tz', $config['board_timezone']),
 );
 
 if ($request->is_set_post('submit'))
@@ -32,8 +30,6 @@ if ($request->is_set_post('submit'))
 		'email'            => array(
 			array('string', false, 6, 60),
 			array('user_email')),
-		'tz'               => array('timezone'),
-		'lang'             => array('language_iso_name'),
 	));
 
 	// Replace "error" strings with their real, localised form
@@ -52,9 +48,9 @@ if ($request->is_set_post('submit'))
 		$group_name = 'REGISTERED';
 
 		$sql = 'SELECT group_id
-					FROM ' . GROUPS_TABLE . "
-					WHERE group_name = '" . $db->sql_escape($group_name) . "'
-						AND group_type = " . GROUP_SPECIAL;
+				FROM ' . GROUPS_TABLE . "
+				WHERE group_name = '" . $db->sql_escape($group_name) . "'
+					AND group_type = " . GROUP_SPECIAL;
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -75,8 +71,8 @@ if ($request->is_set_post('submit'))
 			'user_password'        => $passwords_manager->hash($data['new_password']),
 			'user_email'           => $data['email'],
 			'group_id'             => (int) $group_id,
-			'user_timezone'        => $data['tz'],
-			'user_lang'            => $data['lang'],
+			'user_timezone'        => $config['board_timezone'],
+			'user_lang'            => $user->lang_name,
 			'user_type'            => USER_NORMAL,
 			'user_actkey'          => '',
 			'user_ip'              => $user->ip,
@@ -125,15 +121,15 @@ echo '<html>
 		</tr>
 		<tr>
 			<td style="text-align: right"><label for="new_password">Mot de passe&nbsp;:</label></td>
-			<td><input id="new_password" type="password" tabindex="2" name="new_password" size="25" value="<?php echo $data['new_password']; ?>"></td>
+			<td><input id="new_password" type="password" tabindex="2" name="new_password" size="25" value="<?php echo $data['new_password']; ?>" autocomplete="off"></td>
 		</tr>
 		<tr>
 			<td style="text-align: right"><label for="password_confirm">Confirmez votre mot de passe&nbsp;:</label></td>
-			<td><input id="password_confirm" type="password" tabindex="3" name="password_confirm" size="25" value="<?php echo $data['password_confirm']; ?>"></td>
+			<td><input id="password_confirm" type="password" tabindex="3" name="password_confirm" size="25" value="<?php echo $data['password_confirm']; ?>" autocomplete="off"></td>
 		</tr>
 		<tr>
 			<td style="text-align: right"><label for="email">Courriel&nbsp;:</label></td>
-			<td><input id="email" type="text" tabindex="4" name="email" size="25" maxlength="100" value="<?php echo $data['email']; ?>"></td>
+			<td><input id="email" type="text" tabindex="4" name="email" size="25" maxlength="100" value="<?php echo $data['email']; ?>" autocomplete="off"></td>
 		</tr>
 		<tr>
 			<td style="text-align: center" colspan="2">

@@ -7,12 +7,13 @@ require($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup('ucp');
-
+// Captcha début ajout -->
 if ($config['enable_confirm'])
 {
 	$captcha = $phpbb_container->get('captcha.factory')->get_instance($config['captcha_plugin']);
 	$captcha->init(CONFIRM_REG);
 }
+// <-- Captcha fin ajout
 
 $error = array();
 
@@ -25,7 +26,6 @@ $data = array(
 	'tz'               => $request->variable('tz', $config['board_timezone']),
 );
 
-// Check and initialize some variables if needed
 if ($request->is_set_post('submit'))
 {
 	$error = validate_data($data, array(
@@ -46,6 +46,7 @@ if ($request->is_set_post('submit'))
 	// Replace "error" strings with their real, localised form
 	$error = array_map(array($language, 'lang'), $error);
 
+// Captcha début ajout -->
 	if ($config['enable_confirm'])
 	{
 		$vc_response = $captcha->validate($data);
@@ -59,6 +60,7 @@ if ($request->is_set_post('submit'))
 			$error[] = $language->lang('TOO_MANY_REGISTERS');
 		}
 	}
+// <-- Captcha fin ajout
 
 	if (!count($error))
 	{
@@ -73,9 +75,9 @@ if ($request->is_set_post('submit'))
 		$group_name = 'REGISTERED';
 
 		$sql = 'SELECT group_id
-					FROM ' . GROUPS_TABLE . "
-					WHERE group_name = '" . $db->sql_escape($group_name) . "'
-						AND group_type = " . GROUP_SPECIAL;
+				FROM ' . GROUPS_TABLE . "
+				WHERE group_name = '" . $db->sql_escape($group_name) . "'
+					AND group_type = " . GROUP_SPECIAL;
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -92,18 +94,18 @@ if ($request->is_set_post('submit'))
 		$passwords_manager = $phpbb_container->get('passwords.manager');
 
 		$user_row = array(
-			'username'				=> $data['username'],
-			'user_password'			=> $passwords_manager->hash($data['new_password']),
-			'user_email'			=> $data['email'],
-			'group_id'				=> (int) $group_id,
-			'user_timezone'			=> $data['tz'],
-			'user_lang'				=> $data['lang'],
-			'user_type'				=> USER_NORMAL,
-			'user_actkey'			=> '',
-			'user_ip'				=> $user->ip,
-			'user_regdate'			=> time(),
-			'user_inactive_reason'	=> 0,
-			'user_inactive_time'	=> 0,
+			'username'             => $data['username'],
+			'user_password'        => $passwords_manager->hash($data['new_password']),
+			'user_email'           => $data['email'],
+			'group_id'             => (int) $group_id,
+			'user_timezone'        => $data['tz'],
+			'user_lang'            => $data['lang'],
+			'user_type'            => USER_NORMAL,
+			'user_actkey'          => '',
+			'user_ip'              => $user->ip,
+			'user_regdate'         => time(),
+			'user_inactive_reason' => 0,
+			'user_inactive_time'   => 0,
 		);
 
 		$user_id = user_add($user_row);
@@ -113,10 +115,12 @@ if ($request->is_set_post('submit'))
 			trigger_error('NO_USER', E_USER_ERROR);
 		}
 
+// Captcha début ajout -->
 		if ($config['enable_confirm'] && isset($captcha))
 		{
 			$captcha->reset();
 		}
+// <-- Captcha fin ajout
 
 		$url = append_sid('./index.php');
 		die('<html>
@@ -139,6 +143,16 @@ echo '<html>
 <body>
 	<form method="post">
 	<h1>Vous enregistrer</h1>';
+
+// Captcha début ajout -->
+	if ($config['enable_confirm'])
+	{
+		$confirm_id = $captcha->confirm_id;
+		$confirm_code = true;
+		$confirm_image = '<img src="' . append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=confirm&amp;confirm_id=' . $confirm_id . '&amp;type=' . CONFIRM_REG) . '" alt="" title="" />';
+	}
+// <-- Captcha fin ajout
+
 	if (count($error))
 	{
 		echo '<span style="color: red"><b>' . implode('<br>', $error) . '</b></span>';;
@@ -162,11 +176,9 @@ echo '<html>
 			<td><input id="email" type="text" tabindex="4" name="email" size="25" maxlength="100" value="<?php echo $data['email']; ?>"></td>
 		</tr>
 		<?php
-		if ($config['enable_confirm'])
+// Captcha début ajout -->
+		if ($confirm_code)
 		{
-			$confirm_id = $captcha->confirm_id;
-			$confirm_code = true;
-			$confirm_image='<img src="' . append_sid($phpbb_root_path . 'ucp.' . $phpEx, 'mode=confirm&amp;confirm_id=' . $confirm_id . '&amp;type=' . CONFIRM_REG) . '" alt="" title="">';
 			?>
 			<tr>
 				<td><label for="confirm_id"><?php echo $language->lang('CONFIRM_CODE') . '<br>' . $language->lang('CONFIRM_CODE_EXPLAIN'); ?></label></td>
@@ -178,8 +190,8 @@ echo '<html>
 			</tr>
 			<?php
 		}
+// <-- Captcha fin ajout
 		?>
-		}
 		<tr>
 			<td style="text-align: center" colspan="2">
 				<input type="reset" value="Remettre &agrave; z&eacute;ro" name="reset">&nbsp;

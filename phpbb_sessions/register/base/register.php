@@ -22,18 +22,18 @@ $data = array(
 if ($request->is_set_post('submit'))
 {
 	$error = validate_data($data, array(
-		'username'			=> array(
+		'username'         => array(
 			array('string', false, $config['min_name_chars'], $config['max_name_chars']),
 			array('username', '')),
-		'new_password'		=> array(
+		'new_password'     => array(
 			array('string', false, $config['min_pass_chars'], 0),
 			array('password')),
-		'password_confirm'	=> array('string', false, $config['min_pass_chars'], 0),
-		'email'				=> array(
+		'password_confirm' => array('string', false, $config['min_pass_chars'], 0),
+		'email'            => array(
 			array('string', false, 6, 60),
 			array('user_email')),
-		'tz'				=> array('timezone'),
-		'lang' 				=> array('language_iso_name'),
+		'tz'               => array('timezone'),
+		'lang'             => array('language_iso_name'),
 	));
 
 	// Replace "error" strings with their real, localised form
@@ -71,18 +71,18 @@ if ($request->is_set_post('submit'))
 		$passwords_manager = $phpbb_container->get('passwords.manager');
 
 		$user_row = array(
-			'username'				=> $data['username'],
-			'user_password'			=> $passwords_manager->hash($data['new_password']),
-			'user_email'			=> $data['email'],
-			'group_id'				=> (int) $group_id,
-			'user_timezone'			=> $data['tz'],
-			'user_lang'				=> $data['lang'],
-			'user_type'				=> USER_NORMAL,
-			'user_actkey'			=> '',
-			'user_ip'				=> $user->ip,
-			'user_regdate'			=> time(),
-			'user_inactive_reason'	=> 0,
-			'user_inactive_time'	=> 0,
+			'username'             => $data['username'],
+			'user_password'        => $passwords_manager->hash($data['new_password']),
+			'user_email'           => $data['email'],
+			'group_id'             => (int) $group_id,
+			'user_timezone'        => $data['tz'],
+			'user_lang'            => $data['lang'],
+			'user_type'            => USER_NORMAL,
+			'user_actkey'          => '',
+			'user_ip'              => $user->ip,
+			'user_regdate'         => time(),
+			'user_inactive_reason' => 0,
+			'user_inactive_time'   => 0,
 		);
 
 		$user_id = user_add($user_row);

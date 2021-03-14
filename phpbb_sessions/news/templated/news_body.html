@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>NEWS</title>
+	<style type="text/css">
+		th{
+			background-color: #0066FF;
+			color: #FFFF99;
+		}
+	</style>
+</head>
+<body>
+<table width="100%">
+	<tr>
+		<th>{L_TOPICS}</th>
+		<th>{L_REPLIES}</th>
+		<th>{L_VIEWS}</th>
+		<th>{L_LAST_POST}</th>
+	</tr>
+	<!-- BEGIN topicrow -->
+	<tr style="background-color: <!-- IF topicrow.S_ROW_COUNT is even -->#FFFFCC<!-- ELSE -->#99FFFF<!-- ENDIF -->">
+		<td>
+			<a href="{topicrow.U_VIEW_TOPIC}" class="topictitle">{topicrow.TOPIC_TITLE}</a><br>
+			{L_POST_BY_AUTHOR} {topicrow.TOPIC_AUTHOR} {L_POSTED_ON_DATE} {topicrow.FIRST_POST_TIME}
+		</td>
+		<td>{topicrow.REPLIES}</td>
+		<td>{topicrow.VIEWS}</td>
+		<td>
+			{L_POST_BY_AUTHOR} {topicrow.LAST_POST_AUTHOR}
+			<a href="{topicrow.U_LAST_POST}">{LAST_POST_IMG}</a><br>{L_POSTED_ON_DATE} {topicrow.LAST_POST_TIME}
+		</td>
+	</tr>
+	<!-- END topicrow -->
+</table>
+</body>
+</html>

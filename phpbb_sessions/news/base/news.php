@@ -18,7 +18,6 @@ $sql = 'SELECT forum_id, topic_id, topic_time, topic_title, topic_views, topic_p
 		AND topic_status <> ' . ITEM_MOVED . ' 
 		ORDER BY topic_time DESC';
 $result = $db->sql_query_limit($sql, 10);
-
 ?>
 <html>
 <head>
@@ -47,7 +46,7 @@ $result = $db->sql_query_limit($sql, 10);
 		$view_topic_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'f=' . ($row['forum_id'] ? $row['forum_id'] : (int) $forum_id) . '&amp;t=' . $topic_id);
 
 		$row_colour = ($i % 2) ? '#FFFFCC' : '#99FFFF';
-		echo '<tr bgcolor="' . $row_colour .'">';
+		echo '<tr style="background-color: ' . $row_colour .'">';
 		echo '<td>';
 		echo '<a href="' . $view_topic_url . '">' . censor_text($row['topic_title']) . '</a><br>';
 		echo $language->lang('POST_BY_AUTHOR') . '&nbsp;' . $user_loader->get_username($row['topic_poster'], 'full', false, false, true);
@@ -55,7 +54,7 @@ $result = $db->sql_query_limit($sql, 10);
 		echo '<td>' . ($row['topic_posts_approved'] - 1) . '</td>';
 		echo '<td>' . $row['topic_views'] . '</td>';
 		echo '<td>' . $language->lang('POST_BY_AUTHOR') . '&nbsp;' . $user_loader->get_username($row['topic_last_poster_id'], 'full', false, false, true);
-		echo '&nbsp;<a href="' . $view_topic_url . '&amp;p=' . $row['topic_last_post_id'] . '#p' . $row['topic_last_post_id'] . '">' . $user->img('icon_topic_latest', 'VIEW_LATEST_POST') . '</a><br>';
+		echo '&nbsp;<a href="' . $view_topic_url . '&amp;p=' . $row['topic_last_post_id'] . '#p' . $row['topic_last_post_id'] . '">' . $language->lang('VIEW_LATEST_POST') . '</a><br>';
 		echo $language->lang('POSTED_ON_DATE') . '&nbsp;' .$user->format_date($row['topic_last_post_time']) . '</td>';
 		echo '</tr>';
 		$i++;

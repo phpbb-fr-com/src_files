@@ -45,7 +45,7 @@ else
 {
 	if(!empty($login_error))
 	{
-		echo '<span style="color: red"><b>$login_error</b></span>';
+		echo '<span style="color: red"><b>' . $login_error. '</b></span>';
 	}
 	?>
 	<form method="post">

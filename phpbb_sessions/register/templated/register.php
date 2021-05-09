@@ -1,4 +1,15 @@
 <?php
+/**
+ * @var phpbb\auth\auth                                          $auth
+ * @var phpbb\db\driver\driver_interface                         $db
+ * @var phpbb\config\config                                      $config
+ * @var phpbb\language\language                                  $language
+ * @var phpbb\request\request                                    $request
+ * @var phpbb\template\template                                  $template
+ * @var phpbb\user                                               $user
+ * @var Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container
+ */
+
 define('IN_PHPBB', true);
 $phpbb_root_path = './phpBB3/';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
